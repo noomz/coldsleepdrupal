@@ -1,0 +1,9 @@
+; $Id$
+name = Node weight smile
+description = "Node weight slide smile"
+core = 7.x
+version = 7.x-1.0
+package = Node weight
+
+dependencies[] = node_weight
+files[] = node_weight_smile.module

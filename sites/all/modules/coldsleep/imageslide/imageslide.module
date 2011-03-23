@@ -1,0 +1,226 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function imageslide_menu() {
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function imageslide_form_alter(&$form, &$form_state, $form_id) {
+  if (strrpos($form_id, 'node_form') !== FALSE) {
+    $nids = imageslide_get_nids();
+    $form['imageslide'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Image Slide'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#group' => 'additional_settings',
+    );
+    $form['imageslide']['exposed_imageslide'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Expose this node to imageslide block'),
+      '#default_value' => isset($nids[$form['nid']['#value']]),
+    );
+    $form['#submit'][] = 'imageslide_node_form_submit';
+  }
+}
+
+/**
+ * Node submit callback.
+ */
+function imageslide_node_form_submit($form, &$form_state) {
+  $nids = imageslide_get_nids();
+  if ($form_state['values']['exposed_imageslide']) {
+    $nids[$form_state['values']['nid']] = $form_state['values']['nid'];
+  }
+  else {
+    unset($nids[$form_state['values']['nid']]);
+  }
+  variable_set('exposed_imageslide', $nids);
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function imageslide_block_info() {
+  $nids = imageslide_get_nids();
+  $blocks = array();
+  foreach ($nids as $nid) {
+    if ($node = node_load($nid)) {
+      $blocks['imageslide_'. $nid] = array(
+        'info' => t('Image Slide: !title', array('!title' => $node->title)),
+      );
+    }
+  }
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function imageslide_block_view($delta = '') {
+  $block = array();
+  if (imageslide_is_imageslide_block($delta)) {
+    $nid = substr($delta, strlen('imageslide_'));
+    $node = node_load($nid);
+
+    // Add contextual links.
+    $block['content']['#contextual_links']['imageslide'] = array('node/'. $nid .'/edit', array());
+    $block['content']['#markup'] = imageslide_render($node);
+  }
+  return $block;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function imageslide_block_configure($delta = '') {
+  $form = array();
+  if (imageslide_is_imageslide_block($delta)) {
+    $nid = substr($delta, strlen('imageslide_'));
+    $node = node_load($nid);
+    
+    $instances = field_info_instances('node', $node->type);
+    $image_options = array('' => t('- Select Image field -'));
+    $content_options = array('' => t('- Select Content field -'));
+    foreach ($instances as $field_name => $field) {
+      $label = $field['label'] .' ('. $field_name .')';
+      $content_options[$field_name] = $label;
+
+      if ($field['widget']['type'] == 'image_image') {
+        $image_options[$field_name] = $label;
+      }
+    }
+
+    $styles = image_styles();
+    $style_options = array('' => 'Do not use images style');
+    foreach ($styles as $name => $style) {
+      $style_options[$name] = $style['name'];
+    }
+
+    $form['imageslide'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Image Slide settings'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+    $form['imageslide']['imagefield'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Image'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+    $form['imageslide']['imagefield']['imageslide_image_field'] = array(
+      '#type' => 'select',
+      '#title' => t('Select Image field'),
+      '#options' => $image_options,
+      '#default_value' => variable_get('imageslide_image_field_'. $nid, ''),
+    );
+    $form['imageslide']['imagefield']['imageslide_image_style'] = array(
+      '#type' => 'select',
+      '#title' => t('Select image style'),
+      '#options' => $style_options,
+      '#default_value' => variable_get('imageslide_image_style_'. $nid, ''),
+    );
+    $form['imageslide']['contentfield'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Content'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+    $form['imageslide']['contentfield']['imageslide_content_field'] = array(
+      '#type' => 'select',
+      '#title' => t('Select Content field'),
+      '#options' => $content_options,
+      '#default_value' => variable_get('imageslide_content_field_'. $nid, ''),
+    );
+    $form['imageslide']['contentfield']['imageslide_content_position'] = array(
+      '#type' => 'select',
+      '#title' => t('Content position'),
+      '#options' => array(
+        '' => t('Do not display'),
+        'top' => t('Top'),
+        'bottom' => t('Bottom'),
+      ),
+      '#default_value' => variable_get('imageslide_content_position_'. $nid, ''),
+    );
+  }
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function imageslide_block_save($delta = '', $edit = array()) {
+  if (imageslide_is_imageslide_block($delta)) {
+    $nid = substr($delta, strlen('imageslide_'));
+    variable_set('imageslide_image_field_'. $nid, $edit['imageslide_image_field']);
+    variable_set('imageslide_image_style_'. $nid, $edit['imageslide_image_style']);
+    variable_set('imageslide_content_field_'. $nid, $edit['imageslide_content_field']);
+    variable_set('imageslide_content_position_'. $nid, $edit['imageslide_content_position']);
+  }
+}
+
+/**
+ * Render block.
+ */
+function imageslide_render($node) {
+  $output = $content = '';
+  if ($image_field = variable_get('imageslide_image_field_'. $node->nid, '')) {
+    $image_style = variable_get('imageslide_image_style_'. $node->nid, '');
+
+    $images = $node->{$image_field}['und'];
+    $items = array();
+    foreach ($images as $image) {
+      if ($image_style) {
+        $items[] = theme('image_style', array(
+          'style_name' => $image_style, 
+          'path' => $image['uri'], 
+          'alt' => $image['alt'], 
+          'title' => $image['title']
+        ));
+      }
+    }
+
+    $output .= '<div class="imageslide" id="imageslide-'. $node->nid .'">';
+    foreach ($items as $item) {
+      $output .= '<div>'. $item .'</div>';
+    }
+    $output .= '</div>';
+  }
+  if ($content_field = variable_get('imageslide_content_field_'. $node->nid, '')) {
+    $content = '<div class="content">'. $node->{$content_field}['und'][0]['value'] .'</div>';
+    $position = variable_get('imageslide_content_position_'. $node->nid, '');
+    switch ($position) {
+      case 'top':
+        $output = $content . $output;
+        break;
+      case 'bottom':
+        $output = $output . $content;
+        break;
+    }
+  }
+  return $output;
+}
+
+/**
+ * Check block delta.
+ */
+function imageslide_is_imageslide_block($delta) {
+  $nids = imageslide_get_nids();
+  $possible_blocks = array();
+  foreach ($nids as $nid) {
+    $possible_blocks[] = 'imageslide_'. $nid;
+  }
+  return in_array($delta, $possible_blocks);
+}
+
+/**
+ * Return nids from settings.
+ */
+function imageslide_get_nids() {
+  return variable_get('exposed_imageslide', array());
+}

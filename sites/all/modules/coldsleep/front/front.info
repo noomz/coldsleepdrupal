@@ -1,0 +1,7 @@
+; $Id: front.info $
+name = Front Page
+description = Front Page
+core = "7.x"
+configure = "admin/config/system/front"
+version = 7.x-1.0
+

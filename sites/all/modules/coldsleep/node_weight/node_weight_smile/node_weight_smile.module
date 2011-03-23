@@ -1,0 +1,204 @@
+<?php
+
+define("NODE_WEIGHT_SMILE_DEFAULT_USE_PAGER",        1,           TRUE);
+define("NODE_WEIGHT_SMILE_DEFAULT_NAVIGATION",       1,           TRUE);
+define("NODE_WEIGHT_SMILE_DEFAULT_AUTOPLAY",         1,           TRUE);
+define("NODE_WEIGHT_SMILE_DEFAULT_EFFECT_SPEED",     500,         TRUE);
+define("NODE_WEIGHT_SMILE_DEFAULT_EFFECT_INTERVAL",  3000,        TRUE);
+define("NODE_WEIGHT_SMILE_DEFAULT_PAGER_POSITION",   'top-right', TRUE);
+
+/**
+ * Implementation of hook_weight_info().
+ */
+function node_weight_smile_weight_info() {
+  $form['smile_use_pager'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use pager'),
+    '#description' => t('If this is checked, it\' will be display on position selected below.'),
+    '#default_value' => variable_get('smile_use_pager', NODE_WEIGHT_SMILE_DEFAULT_USE_PAGER),
+  );
+  $form['smile_pager'] = array(
+    '#type' => 'container',
+    '#states' => array(
+      'invisible' => array(
+        'input[name="smile_use_pager"]' => array('checked' => FALSE),
+      ),
+    ),
+  );
+  $form['smile_pager']['smile_pager_position'] = array(
+    '#type' => 'select',
+    '#title' => t('Pager\' position'),
+    '#description' => t('Select position'),
+    '#options' => array(
+      'top-left' => t('Top left'),
+      /*'top-right' => t('Top right'),
+      'top-center' => t('Top center'),
+      'bottom-left' => t('Bottom left'),
+      'bottom-right' => t('Bottom right'),
+      'bottom-center' => t('Bottom center'),*/
+    ),
+    '#default_value' => variable_get('smile_pager_position', NODE_WEIGHT_SMILE_DEFAULT_PAGER_POSITION),
+  );
+  $form['smile_navigation'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use navigation'),
+    '#description' => t('Navigation will be shown on the left and right side.'),
+    '#default_value' => variable_get('smile_navigation', NODE_WEIGHT_SMILE_DEFAULT_NAVIGATION),
+  );
+  $form['smile_autoplay'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Autoplay'),
+    '#description' => t('If this is checked, the slide image will autopay.'),
+    '#default_value' => variable_get('smile_autoplay', NODE_WEIGHT_SMILE_DEFAULT_AUTOPLAY),
+  );
+  $form['smile_effect_speed'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Effect speed'),
+    '#description' => t('Speed in millisecond.'),
+    '#default_value' => variable_get('smile_effect_speed', NODE_WEIGHT_SMILE_DEFAULT_EFFECT_SPEED),
+    '#size' => 5,
+  );
+  $form['smile_effect_interval'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Effect interval'),
+    '#description' => t('Time to move between image in millisecond.'),
+    '#default_value' => variable_get('smile_effect_interval', NODE_WEIGHT_SMILE_DEFAULT_EFFECT_INTERVAL),
+    '#size' => 5,
+  );
+  
+  return array(
+    'name' => t('Smile'),
+    'description' => t('Smile display'),
+    'form' => $form,
+  );
+}
+
+/**
+ * Implementation of hook_weight_view().
+ */
+function node_weight_smile_weight_view($nodes, $type, $settings) {
+  // Settings
+  $embed = false;
+  foreach ($settings as $name => $value) {
+    $$name = $value;
+  }
+
+  // Limit items.
+  $nodes = array_slice($nodes, 0, $number_of_item);
+
+  // Generate items.
+  $items = array();
+  foreach ($nodes as $i => $node) {
+    foreach ($node->node_weight as $name => $value) {
+      $$name = $value;
+    }
+    
+    $hide = ($i > 0) ? 'none' : 'block';
+
+    $item = "<div id=\"smile-{$node->nid}\" class=\"node-weight-page\" style=\"display: {$hide};\">";
+    $item .= '<div class="node-weight-slide-wrapper">';
+    if ($embed) {
+      $item .= $embed;
+    }
+    elseif ($image_path) {
+      // Make image
+      $image = theme_image_style(array(
+        'style_name' => $settings['preset_image'],
+        'path' => $image_path, 
+        'alt' => $node->title, 
+        'title' => $node->title,
+        'attributes' => array('width' => $settings['image_width'].'px', 'height' => $settings['image_height'].'px'),
+        'getsize' => FALSE,
+      ));
+      // Image as link
+      if ($display_image_as_link) {
+        $options = array('html' => TRUE);
+        if (mb_substr($node->url, 0, 7) == 'http://') {
+          $options['absolute'] = TRUE;
+          $options['attributes'] = array('target' => '_blank');
+        }
+        $image = l($image, $node->url, $options);
+      }
+      $item .= $image;
+    }
+    elseif ($swf_path && module_exists('swftools')) {
+      /*$size = explode('x', variable_get('node_weight_swf_size_'.$delta, '210x150'));
+      $swf_height = $size[1];
+      $swf_width = $size[0];
+      $items .= '<div class="node-weight-'.$delta.'-swf">';
+      $items .= swf($swf_path, array('params' => array('height' => $swf_height, 'width' => $swf_width)));
+      $items .= '</div>';*/
+    }
+
+    // Has content.
+    if ($display_title || $display_body) {
+      $item .= '<div class="node-weight-content">';
+      if ($display_title) {
+        $item .= "<h3>". ($display_image_as_link ? $node->link : $node->title) ."</h3>";
+      }
+      if (!empty($display_body) && $node->body) {
+        $item .= '<div class="node-weight-body node-weight-'. $type .'-body">';
+        node_build_content($node, 'full');
+        $body = '';
+        foreach ($node->content['body'] as $key => $value) {
+          $body .= is_numeric($key)? $value['#markup']: '';
+        }
+        $item .= strip_tags($body);
+        $item .= '</div>';
+      }
+      $item .= '</div>';
+    }
+
+    $item .= '</div></div>';
+    $items[] = $item;
+  }
+
+  // HTML structure.
+  $output = '<div class="node-weight-slide-smile">';
+  $output .= '<div class="node-weight-slide-bottom"></div>';
+  $output .= '<div class="node-weight-slide-top"></div>';
+  $output .= '<div class="node-weight-slides">'. implode('', $items) .'</div>';
+  // If use navigation.
+  if ($smile_navigation) {
+    $output .= '<a href="#" class="node-weight-prev node-weight-navigation"></a>';
+    $output .= '<a href="#" class="node-weight-next node-weight-navigation"></a>';
+  }
+  // If use pager.
+  if ($smile_use_pager) {
+    $output .= '<div class="node-weight-slide-pager"></div>';
+  }
+  $output .= '</div>';
+  if (!empty($footer)) {
+    $output .= '<div class="node-weight-footer node-weight-'. $type .'-footer">';
+    $output .= '<div class="warp">'. $footer .'</div>';
+    $output .= '</div>';
+  }
+  
+  // Neccessary variable to javascript.
+  $smile_settings['node_weight']['smile'] = array(
+    'speed' => $smile_effect_speed ? $smile_effect_speed : NODE_WEIGHT_SMILE_DEFAULT_EFFECT_SPEED,
+    'interval' => $smile_effect_interval ? $smile_effect_interval : NODE_WEIGHT_SMILE_DEFAULT_EFFECT_INTERVAL,
+    'autoplay' => isset($smile_autoplay) ? $smile_autoplay : NODE_WEIGHT_SMILE_DEFAULT_AUTOPLAY,
+    'use_pager' => isset($smile_use_pager) ? $smile_use_pager : NODE_WEIGHT_SMILE_DEFAULT_USE_PAGER,
+    'pager_position' => $smile_pager_position ? $smile_pager_positoin : NODE_WEIGHT_SMILE_DEFAULT_PAGER_POSITION,
+    'use_navigation' => isset($smile_navigation) ? $smile_navigation : NODE_WEIGHT_SMILE_DEFAULT_NAVIGATION,
+  );
+  drupal_add_css(drupal_get_path('module', 'node_weight_smile') .'/node_weight.smile.css');
+  drupal_add_js($smile_settings, 'setting');
+  drupal_add_js(drupal_get_path('module', 'node_weight_smile') .'/node_weight.smile.js');
+  drupal_add_js(drupal_get_path('module', 'node_weight_smile') .'/node_weight.smile_build.js');
+  
+  return $output;
+}
+
+/**
+ * Implementations of hook_theme().
+ */
+function node_weight_smile_theme() {
+  return array(
+    'node_weight_smile' => array(
+      'template' => 'node-weight-smile',
+      'arguments' => array(),
+    ),
+  );
+}

@@ -1,0 +1,42 @@
+<?php
+
+/**
+ * Implements hook_permission().
+ */
+function front_permission() {
+  return array(
+    'administer front' => array(
+      'title' => t('Administer front'),
+    ),
+    'access frontpage' => array(
+      'title' => t('Access frontpage'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function front_menu() {
+  $items['admin/config/system/front'] = array(
+    'title' => t('Front Page'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('front_page_admin'),
+    'access arguments' => array('administer front'),
+    'file' => 'includes/front.admin.inc',
+  );
+  $items['front_page'] = array(
+    'title' => '',
+    'page callback' => 'front_page',
+    'access arguments' => array('access frontpage'),
+    'type' => MENU_SUGGESTED_ITEM,
+  );
+  return $items;
+}
+
+/**
+ * Front page.
+ */
+function front_page() {
+  return '';
+}

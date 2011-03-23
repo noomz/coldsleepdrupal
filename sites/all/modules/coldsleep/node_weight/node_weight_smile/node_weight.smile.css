@@ -1,0 +1,108 @@
+.node-weight-slide-pager {
+  position: relative;
+  z-index: 30;
+  float: right;
+  margin: 0 -35px 0 0;
+  top: -340px;
+}
+
+.node-weight-slide-pager a {
+  float: left;
+  width: 16px;
+  height: 15px;
+  overflow: hidden;
+  text-decoration: none;
+  text-indent: -1234px;
+  background: url("images/slide-pager.png") no-repeat scroll 0 0 transparent;
+}
+
+.node-weight-slide-pager a:hover {
+  background-position: -16px 0;
+}
+
+.node-weight-slide-pager a.active {
+  background-position: -32px 0;
+}
+
+.node-weight-prev,
+.node-weight-next {
+  position: relative;
+  display: block;
+  height: 48px;
+  width: 48px;
+  z-index: 30;
+  top: -200px;
+}
+
+.node-weight-prev {
+  float: left;
+  background: url("images/button-prev.png") no-repeat scroll 0 0 transparent;
+  margin-left: 10px;
+}
+
+.node-weight-next {
+  float: right;
+  background: url("images/button-next.png") no-repeat scroll 0 0 transparent;
+  margin-right: 10px;
+}
+
+.node-weight-content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: url("images/1x1-black.png") repeat scroll 0 0 transparent;
+  z-index: 99;
+  color: #FFF;
+  padding: 10px 20px;
+  width: 100%;
+}
+
+.node-weight-content,
+.node-weight-content h3,
+.node-weight-content h3 a {
+  color: #FFF;
+}
+
+.node-weight-content h3 {
+  margin: 5px 0;
+}
+
+.node-weight-content div {
+  float: left;
+}
+
+.node-weight-content > * {
+  padding: 5px 0px;
+}
+
+.node-weight-content-overlay {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  opacity: 0.8;
+}
+
+.node-weight-slide-bottom {
+  background: url("images/border-bottom.png") no-repeat scroll 0 10px transparent;
+  height: 55px;
+  z-index: 66;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.node-weight-slide-top {
+  background: url("images/border-top.png") no-repeat scroll 0 0 transparent;
+  width: 100%;
+  height: 9px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 66;
+}

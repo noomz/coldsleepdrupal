@@ -1,0 +1,41 @@
+#header-blocks{
+	position: absolute;
+	right: 0px;
+	top: 37px !important;
+}
+
+.front #content-column{
+	
+}
+#coldsleep-hooker-member-form #edit-email, #coldsleep-hooker-member-form #edit-password, #coldsleep-hooker-member-form #edit-retype-password {
+	padding: 15px 10px;
+	height: 20px;
+}
+
+#coldsleep-hooker-member-form #edit-create, #coldsleep-hooker-member-form #edit-login{
+	font-size: 0px;
+}
+#block-block-6 .content .download-text a {
+	*padding-top: 0px;
+	*margin-top: 1px;
+	*height: 50px;
+}
+#block-block-6 .content .download-text a:hover {
+	*background-position: 0 -220px;
+}
+.node-weight-slide-cycle .node-weight-slide-pager ul li a{
+	*height : 13px;
+}
+#block-menu-menu-support li{
+	*height : 40px;
+}
+#block-menu-menu-support li.first{ border-top: none; *height: 40px;}
+#sidebar-second .block .content {
+	/*
+width: 317px;
+	height: 600px;
+	background-color: blue;
+	padding-top: 50px;
+	z-index: 100;
+*/
+}

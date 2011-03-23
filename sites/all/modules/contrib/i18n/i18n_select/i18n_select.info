@@ -1,0 +1,13 @@
+; $Id: i18n_select.info,v 1.1.2.1 2011/01/11 18:47:19 jareyero Exp $
+name = Multilingual select
+description = API module for multilingual content selection
+dependencies[] = i18n
+package = Multilanguage
+core = 7.x
+
+; Information added by drupal.org packaging script on 2011-01-11
+version = "7.x-1.0-alpha1"
+core = "7.x"
+project = "i18n"
+datestamp = "1294773668"
+

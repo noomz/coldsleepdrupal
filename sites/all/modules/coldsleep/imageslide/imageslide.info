@@ -1,0 +1,7 @@
+; $Id: imageslide.info $
+name = Image Slide
+description = Use field image to be slideshow.
+core = 7.x
+version = 7.x-1.0
+
+dependencies[] = field_ui

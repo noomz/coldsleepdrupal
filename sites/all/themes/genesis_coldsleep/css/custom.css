@@ -1,0 +1,373 @@
+/* $Id: custom.css,v 1.1 2010/06/24 23:08:18 jmburnz Exp $ */
+
+/**********************************************************
+ *                 Custom Styles
+ **********************************************************/
+/**
+ * Here you can add custom stles for your theme that do not fit
+ * into one if the modular stylesheets.
+ */
+
+/* Workaround for Admin menu bar shadow */
+html body.admin-menu {
+  margin-top:45px !important;
+}
+
+/********** Layout(Gobal) *********/
+body{
+	padding: 0px;
+	font-size: 13px;
+	line-height: 1.4em;
+	color: #6f7070;
+	font-family: Arial, Helvetica, sans-serif;
+	background: #DDDDDD url('../images/bg-body.png') ;
+}
+
+.container{
+	width: 960px;
+    margin: 0 auto;
+    position: relative;
+}
+.wrapper-header{
+	height: 130px;
+	background: url('../images/bg-header.jpg') repeat-x;
+}
+	#header{ position: relative;}
+	/****** leaderboard Links *******/
+	#leaderboard #block-block-8{
+		margin: 0px;
+		text-align: right;
+		padding: 10px 0px 0px 0px;
+	}
+	
+	#leaderboard a{
+		font-family: "Lucida Grande";
+		font-size: 12px;
+		text-decoration: none;
+		color: #063b7d;
+		padding: 0px 10px 0px 10px;
+	}
+	#leaderboard a#login-link{
+		font-weight: bold;
+		background: url('../images/icon-lock.png') no-repeat 0px -1px;
+		padding: 0px 0px 0px 25px;
+		margin: 0px 0px 0px 10px;
+		text-transform: uppercase;
+	}
+	#leaderboard a:hover{ color: #00b4ff;}
+	
+	/************** Menu ***************/
+	#header-blocks{
+		position: absolute;
+		top: 18px;
+		right: 0px;
+	}
+	.menu-level-1 ul.menu li{
+		list-style: none;
+		list-style-image: none;
+		float: left;
+	}
+	.menu-level-1 ul.menu li a{
+		display: block;
+		background: url('../images/button-menu.png') no-repeat;
+		height: 44px;
+		text-indent: -999em;
+		overflow: hidden;
+		width: 72px;
+	}
+	.menu-level-1 ul.menu li.menu-mlid-198 a{width: 72px;}
+	.menu-level-1 ul.menu li.menu-mlid-198 a:hover,
+	.menu-level-1 ul.menu li.menu-mlid-198 a.active{
+		background-position: 0px -44px;
+	}
+	.menu-level-1 ul.menu li.menu-mlid-378 a{
+		width: 160px;
+		background-position: -80px 0px;
+	}
+	.menu-level-1 ul.menu li.menu-mlid-378 a:hover,
+	.menu-level-1 ul.menu li.menu-mlid-378 a.active{
+		background-position: -80px -44px;
+	}
+	.menu-level-1 ul.menu li.menu-mlid-379 a{
+		width: 93px;
+		background-position: -257px 0px;
+	}
+	.menu-level-1 ul.menu li.menu-mlid-379 a:hover,
+	.menu-level-1 ul.menu li.menu-mlid-379 a.active{
+		background-position: -257px -44px;
+	}
+
+.not-front .wrapper-secondary{
+	height: 126px;
+	background: #06387D url('../images/bg-not-front.jpg') repeat-x left bottom;
+}
+.front .wrapper-secondary, .section-how-it-works .wrapper-secondary{
+	height: 433px;
+	background: #06387D url('../images/bg-secondary.jpg') repeat-x left bottom;
+}
+.section-how-it-works .wrapper-secondary{ height: 480px;}
+
+.wrapper-content{
+	background: #fff url('../images/bg-content.jpg') repeat-x bottom left;
+}
+	#sidebar-second{
+		margin-left: 100px;
+	}
+.section-how-it-works .wrapper-content{
+	background-position: top left;
+}
+
+/* Footer */
+.wrapper-footer{
+/* 	background: #DDDDDD url('../images/bg-footer.jpg') repeat-x; */
+	clear: both;
+}
+#footer{
+	padding: 15px 0px;
+	margin: 0px;
+	height: 169px;
+	font-size: 0.9em;
+}
+	#footer ul{
+		margin: 0px;
+	}
+	#footer ul.sitemap-list-1, #footer ul.sitemap-list-2, #footer ul.sitemap-list-3{
+		width: 200px;
+		float: left;
+		margin-top: -5px;
+	}
+	#footer ul li{
+		margin: 10px 0px;
+		list-style: none;
+	}
+	#footer ul li a, #block-block-4 .content p {
+		font-family: Arial;
+		color: #747474;
+		font-size: 1em;
+		text-shadow: 1px 1px #FDFDFD;
+	}
+	#footer ul li a:hover {
+		text-decoration: none;
+		color:#000;
+	}
+	
+#footer #block-block-3{
+	width: 644px;
+	float: left;
+	clear: none;
+	margin-top: 3px;
+}
+#footer #block-block-4{
+	width: 200px;
+	float: left;
+	clear: none;
+	margin-top: 3px;
+}
+	#footer #block-block-3 h2.block-title, #footer #block-block-4 h2.block-title{
+		background: url('../images/copyright-sitemap.png') no-repeat -3px 0px;
+		width: 139px;
+		height: 21px;
+		text-indent: -999em;
+		margin: 0px 0px 10px 0px;
+	}
+	#footer #block-block-3 h2.block-title {
+		background-position: -3px -21px;
+	}
+	#footer #block-block-4 .content p{
+		margin-top: 5px;
+	}
+
+
+/******** End Layout ***********/
+#block-block-5 p.front-hilight-text {
+	font-size: 1.1em;
+}
+
+/****** Pricing Page ********/
+#coldsleep-hooker-member-form{
+	margin: 0px 0px 120px 0px;
+}
+#coldsleep-hooker-member-form .form-type-textfield{
+	margin: 20px 0px;
+}
+	#coldsleep-hooker-member-form #edit-email,
+	#coldsleep-hooker-member-form #edit-password,
+	#coldsleep-hooker-member-form #edit-retype-password{
+		height: 48px;
+		border: 1px solid #b2cade;
+		border-radius: 5px;
+		-webkit-border-radius: 5px;
+		-moz-border-radius: 5px;
+		-o-border-radius: 5px;
+		-ms-border-radius: 5px;
+		-khtml-border-radius: 5px;
+		background: url('../images/bg-inputtext.png') repeat-x;
+		font-size: 16px;
+		color: #454545;
+		padding: 0px 10px;
+		width: 470px;
+	}
+	#coldsleep-hooker-member-form #edit-create,
+	#coldsleep-hooker-member-form #edit-login{
+		background: url('../images/button-create-account.png') no-repeat;
+		text-indent: -999em;
+		width: 134px;
+		height: 42px;
+		border: none;
+		display: block;
+		margin-left: 155px;
+	}
+	#coldsleep-hooker-member-form #edit-login{
+		background: url('../images/button-login.png') no-repeat;
+		height: 43px;
+		width: 69px;
+	}
+	#coldsleep-hooker-member-form #edit-create:hover{
+		cursor: pointer;
+		background-position: 0px -42px;
+	}
+	#coldsleep-hooker-member-form #edit-login:hover{
+		cursor: pointer;
+		background-position: 0px -43px;
+	}
+	#coldsleep-hooker-member-form .form-type-textfield label{
+		float: left;
+		margin: 17px 30px 0px 0px;
+	    text-align: right;
+	    width: 125px;
+	    color: #454545;
+	    font-size: 16px;
+	    font-weight: lighter;
+	}
+	
+div#edit-type{
+	margin: 0px 0px 25px 150px;
+	color: #454545;
+    font-size: 16px;
+    padding: 20px 0px 0px 0px;
+}
+	div#edit-type .form-item{
+		margin: 15px 0px;
+	}
+	
+#coldsleep-hooker-member-form .form-type-radios > label{
+	font-size: 18px;
+	font-weight: bold;
+	color: #454545;
+}
+div.pricing-description{
+	text-align: center;
+	padding-bottom: 40px;
+	margin-top: -10px;
+	margin-bottom: 30px;
+	background: url('../images/bg-pricing.png') no-repeat bottom;
+}
+	div.pricing-description p {
+		font-size: 22px;
+		font-weight: bold;
+		color: #454545;
+	}
+	div.pricing-description em{
+		color: #00aeff;
+		font-style: normal;
+	}
+	div.pricing-description span{
+		color: #9d9c9c;
+		font-size: 16px;
+	}
+
+
+.front #content{
+	width: 600px;
+}
+#block-menu_block-1 div.contextual-links-wrapper{
+	right: -30px;
+}
+#block-block-8 div.contextual-links-wrapper{ right: -40px;}
+
+/* FAQ Menu */
+#block-menu-menu-support{
+	margin: 0px;
+	padding: 0px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+    background-color: #D5EAF4;
+    border: 1px solid #D6EBFC;
+    padding: 10px;
+    width: 228px;
+}
+#block-menu-menu-support .menu{ margin: 0px; padding: 0px;}
+
+#block-menu-menu-support li.first{ border-top: none;}
+#block-menu-menu-support li{
+	list-style: none;
+	list-style-image: none;
+	display: block;
+    line-height: 30px;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+	border-bottom: 1px solid #AFD8F5;
+	border-top: 1px solid #FFFFFF;
+}
+#block-menu-menu-support li.active-trail{
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+    background-position: 0 -30px;
+    color: #FFFFFF;
+    text-shadow: 1px 1px #718697;
+}
+#block-menu-menu-support .menu li a{
+	background: url("../images/ic-arrow.png") no-repeat scroll 0 0 transparent;
+    color: #0961A0;
+    display: block;
+    height: 16px;
+    line-height: 16px;
+    padding: 7px 0 7px 40px;
+    text-shadow: 1px 1px #C3DACB;
+    margin: 7px 0px;
+}
+#block-menu-menu-support .menu li a.active{
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+    background-color: #0D5FA4;
+    background-position: 0 -30px;
+    color: #FFFFFF;
+    text-shadow: 1px 1px #718697;
+}
+
+
+/* clearfix */
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
+
+
+
+
+
+
+
+
+
+

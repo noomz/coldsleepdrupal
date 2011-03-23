@@ -1,0 +1,9 @@
+; $Id $
+name = Node weight
+description = "Add weight to node with node weight manager."
+core = 7.x
+version = 7.x-2.0
+package = Node weight
+files[] = node_weight.module
+files[] = node_weight.admin.inc
+files[] = node_weight.install

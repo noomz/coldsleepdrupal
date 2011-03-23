@@ -1,0 +1,62 @@
+<?php
+// $Id: belatedpng.module,v 1.0.0.0 2009/09/28 12:00:00 dzieyzone Exp $
+
+/**
+* Implementation of hook_help
+*/
+function belatedpng_help($path = '', $arg = NULL) {
+  $output = '';
+  switch ($path) {
+    case 'admin/help#belatedpng':
+    case 'admin/settings/belatedpng':
+      $output = '<p>'.  t("Unlike other PNG fix scripts for IE6, DD_belatedPNG ensure that background-position and background-repeat are properly supported and fixes the grey background issue."). '</p>
+			<p>'.t("There is no usage of AlphaImageLoader, so script doesn't have the buggy z-indexing associated with that filter.").'</p>
+			DD_belatedPNG was made by <a href="http://www.dillerdesign.com/experiment/DD_belatedPNG/">Drew Diller</a>';
+      break;
+  }
+  return $output;
+}
+
+function belatedpng_init() {
+  $belatedpngapply = variable_get('belatedpng_css_toapply', '');
+  if (!empty($belatedpngapply)) {
+    $inline = '<!--[if lt IE 7]>
+<script type="text/javascript" src="'. base_path() . drupal_get_path('module', 'belatedpng') . '/belatedpng.js"></script>
+<script type="text/javascript">
+	DD_belatedPNG.fix("'.$belatedpngapply.'");
+</script>															 
+<![endif]-->';
+    $element = array(
+      '#type' => 'markup',
+      '#markup' => $inline,
+    );
+    drupal_add_html_head($element, 'belatedpng');
+  }
+}
+
+/**
+ * Implementation of hook_menu
+ */ 
+function belatedpng_menu() {
+  $items = array();
+  $items['admin/config/user-interface/belatedpng'] = array(
+    'title' => 'belatedPNG',
+    'description' => 'Configure belatedPNG.',
+    'access arguments' => array('administer site configuration'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('belatedpng_admin')
+  );
+  return $items;
+}
+
+function belatedpng_admin() {
+  $form = array();
+  $form['belatedpng_css_toapply'] = array(
+    '#type' => 'textarea',
+    '#title' => t('CSS Classes/Selectors to <em>Include</em>'),
+    '#default_value' => variable_get('belatedpng_css_toapply', ''),
+    '#description' => t('CSS selectors including tag, class, id where to apply the PNG. For example use <code>#belatedpng</code> for ID, <code>.belatedpng</code> for classes, <code>img</code> for tags, and/or <code>#belatedid, .belatedclass, img</code> for combination.'),
+    '#rows' => 10,
+  );
+  return system_settings_form($form);
+}

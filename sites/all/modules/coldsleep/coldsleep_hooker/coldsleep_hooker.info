@@ -1,0 +1,5 @@
+; $Id: coldsleep_hooker.info $
+name = ColdSleep Hooker
+description = Hook functions.
+core = 7.x
+version = 7.x-1.0
